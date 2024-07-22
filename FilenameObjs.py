@@ -36,10 +36,12 @@ class S3Filename:
     def __init__(self, filename:str):
         super(S3Filename, self).__init__(filename)
         self.s3 = boto3.client(
-            's3', aws_access_key_id=aws_access_key_id, aws_secret_access_key=aws_secret_access_key, 
-            region_name=region_name
+            's3', 
+            aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+            aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+            region_name=os.environ['REGION_NAME']
         )
-        self.s3_bucket_name = kwargs['s3_bucket_name']
+        self.s3_bucket_name = os.environ['S3_BUCKET_NAME']
     
     def load(self):
         image_byte_string = self.s3.get_object(
@@ -51,6 +53,7 @@ class S3Filename:
 class GCSFilename:
     def __init__(self, filename:str):
         super(GCSFilename, self).__init__(filename)
+        self.gcs_bucket_name = os.environ['GCS_BUCKET_NAME']
     
     def load(self):
         image = self.img_file_loader.load_file()  # PIL Image, in 'RGB' order or npy file
