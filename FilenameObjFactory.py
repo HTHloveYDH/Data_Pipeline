@@ -12,7 +12,12 @@ class FilenameObjFactory:
     def create(self, filename:str):
         loc = self.filename2loc(filename)
         classname = classname_map[loc]
-        return eval(classname)(filename)
+        return classname(filename)
 
     def filename2loc(self, filename:str):
-        return loc
+        if 's3' in filename:
+            return 's3'
+        elif 'gcs' in filename:
+            return 'gcs'
+        else:
+            return 'local_disk'
