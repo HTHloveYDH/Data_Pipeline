@@ -8,7 +8,7 @@ classname_map = {
 
 class FilenameObjFactory:
     def __init__(self):
-        self.valid_cloud_storage_list = ['S3Filename', 'GCSFilename', 'LocalFilename']
+        self.valid_classname_list = ['S3Filename', 'GCSFilename', 'LocalFilename']
         print('FilenameObjFactory built successfully')
     
     def create(self, filename:str):
@@ -17,5 +17,5 @@ class FilenameObjFactory:
         return classname(filename)
 
     def create_v2(self, filename:str, classname:str):
-        assert classname in self.valid_cloud_storage_list
+        assert classname in self.valid_classname_list
         return eval(classname)(filename)
