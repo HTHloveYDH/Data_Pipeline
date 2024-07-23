@@ -25,7 +25,7 @@ def main():
     custom_train_config = {}
     # set global variables
     runtime_global_vars_map = {}
-    runtime_global_vars_map.update({'s3_bucket_name': , args.s3_bucket_name})
+    runtime_global_vars_map.update({'s3_bucket_name': args.s3_bucket_name})
     set_global_vars(**runtime_global_vars_map)
 
     ''' ________________________________________ load dataset ________________________________________ '''
