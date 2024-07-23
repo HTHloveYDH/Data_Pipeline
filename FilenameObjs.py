@@ -66,7 +66,7 @@ class GCSFilename:
         blob = self.bucket.blob(self.filename)
         blob = blob.download_as_string()
         # blob = blob.decode('utf-8')
-        blob = StringIO(blob)
+        # blob = StringIO(blob)
         self.img_file_loader.filename = blob  # string
         image = self.img_file_loader.load_file()  # PIL Image, in 'RGB' order or npy file
         return image
