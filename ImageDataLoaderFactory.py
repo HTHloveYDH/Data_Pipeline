@@ -1,36 +1,42 @@
 import os
 
-from ImageFileLoader import NormalImageFileLoader, NpyImageFileLoader, NpyImageFileLoaderV2
+from ImageDataLoader import NormalImageDataLoader, NpyImageDataLoader, NpyImageDataLoaderV2, \
+    ArrayImageDataLoader
 from utils import filename2loc
 
 
 classname_map = {
     's3': {
-        'npy': NpyImageFileLoaderV2, 
-        'jpeg': NormalImageFileLoader, 
-        'jpg': NormalImageFileLoader, 
-        'png': NormalImageFileLoader
+        'npy': NpyImageDataLoaderV2, 
+        'jpeg': NormalImageDataLoader, 
+        'jpg': NormalImageDataLoader, 
+        'png': NormalImageDataLoader,
+        'bmp': NormalImageDataLoader,
     }, 
     'gcs': {
-        'npy': NpyImageFileLoaderV2, 
-        'jpeg': NormalImageFileLoader, 
-        'jpg': NormalImageFileLoader, 
-        'png': NormalImageFileLoader
+        'npy': NpyImageDataLoaderV2, 
+        'jpeg': NormalImageDataLoader, 
+        'jpg': NormalImageDataLoader, 
+        'png': NormalImageDataLoader,
+        'bmp': NormalImageDataLoader,
     }, 
     'local_disk': {
-        'npy': NpyImageFileLoader, 
-        'jpeg': NormalImageFileLoader, 
-        'jpg': NormalImageFileLoader, 
-        'png': NormalImageFileLoader
+        'npy': NpyImageDataLoader, 
+        'jpeg': NormalImageDataLoader, 
+        'jpg': NormalImageDataLoader, 
+        'png': NormalImageDataLoader,
+        'bmp': NormalImageDataLoader,
+        '': ArrayImageDataLoader
     }
 }
 
 class ImageDataLoaderFactory:
     def __init__(self):
         self.valid_classname_list = [
-            'NormalImageFileLoader', 
-            'NpyImageFileLoader', 
-            'NpyImageFileLoaderV2'
+            'NormalImageDataLoader', 
+            'NpyImageDataLoader', 
+            'NpyImageDataLoaderV2',
+            'ArrayImageDataLoader'
         ]
     
     def create(self, filename:str):
