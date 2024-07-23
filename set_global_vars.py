@@ -19,5 +19,6 @@ def cloud_storage_init():
     global_vars_manager.set_global_var('S3_BUCKET_NAME', os.environ['S3_BUCKET_NAME'])
     global_vars_manager.set_global_var('GCS_BUCKET_NAME', '')
 
-def set_global_vars():
+def set_global_vars(**kwargs):
     cloud_storage_init()
+    global_vars_manager.set_global_var('img_mode', kwargs['img_mode'])
