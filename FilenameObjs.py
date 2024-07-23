@@ -8,7 +8,7 @@ from ImageFileLoader import NormalImageFileLoader, NpyImageFileLoader
 import global_vars_manager
 
 
-def create_img_file_loader(filename:str):
+def create_img_data_loader(filename:str):
     path_delimiter = {'posix': '/', 'nt': '\\'}[os.name]
     suffix = filename.split(path_delimiter)[-1].split('.')
     if suffix in ['jpeg', 'jpg', 'png', 'bmp']:
@@ -21,7 +21,7 @@ def create_img_file_loader(filename:str):
 class Filename:
     def __init__(self, filename:str):
         self.filename = filename 
-        self.img_file_loader = create_img_file_loader(filename)
+        self.img_data_loader = create_img_data_loader(filename)
 
     def load(self):
         raise NotImplementedError(" Can not call this member function via base class 'Filename'! ")
@@ -31,7 +31,7 @@ class LocalFilename(Filename):
         super(LocalFilename, self).__init__(filename)
     
     def load(self):
-        image = self.img_file_loader.load_file()  # PIL Image, in 'RGB' order or npy file
+        image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
 
 class S3Filename:
@@ -51,8 +51,8 @@ class S3Filename:
         image_byte_string = self.s3.get_object(
             Bucket=self.s3_bucket_name, Key=self.filename
         )['Body'].read()
-        self.img_file_loader.filename = image_byte_string  # bytes stream
-        image = self.img_file_loader.load_file()  # PIL Image, in 'RGB' order or npy file
+        self.img_data_loader.filename = image_byte_string  # bytes stream
+        image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
 
 class GCSFilename:
@@ -67,6 +67,6 @@ class GCSFilename:
         blob = blob.download_as_string()
         # blob = blob.decode('utf-8')
         # blob = StringIO(blob)
-        self.img_file_loader.filename = blob  # string
-        image = self.img_file_loader.load_file()  # PIL Image, in 'RGB' order or npy file
+        self.img_data_loader.filename = blob  # string
+        image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
