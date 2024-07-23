@@ -5,6 +5,7 @@ import boto3
 from google.cloud import storage
 
 from ImageFileLoader import NormalImageFileLoader, NpyImageFileLoader
+from utils import filename2loc
 import global_vars_manager
 
 
@@ -14,7 +15,11 @@ def create_img_data_loader(filename:str):
     if suffix in ['jpeg', 'jpg', 'png', 'bmp']:
         return NormalImageFileLoader(filename)
     elif suffix == 'npy':
-        return NpyImageFileLoader(filename)
+        loc = filename2loc(filename)
+        if loc in ['s3', 'gcs']:
+            return NpyImageFileLoaderV2(filename)
+        else:
+            return NpyImageFileLoader(filename)
     else:
         raise ValueError(f'.{suffix} is not supported')
 
@@ -51,7 +56,7 @@ class S3Filename:
         image_byte_string = self.s3.get_object(
             Bucket=self.s3_bucket_name, Key=self.filename
         )['Body'].read()
-        self.img_data_loader.filename = image_byte_string  # bytes stream
+        self.img_data_loader.filename = BytesIO(image_byte_string)  # bytes stream
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
 
@@ -66,7 +71,6 @@ class GCSFilename:
         blob = self.bucket.blob(self.filename)
         blob = blob.download_as_string()
         # blob = blob.decode('utf-8')
-        # blob = StringIO(blob)
-        self.img_data_loader.filename = blob  # string
+        self.img_data_loader.filename = BytesIO(blob)  # bytes stream
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
