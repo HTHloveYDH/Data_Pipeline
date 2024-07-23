@@ -15,9 +15,9 @@ class FilenameObjFactory:
         return classname(filename)
 
     def filename2loc(self, filename:str):
-        if 's3' in filename:
+        if 's3://' in filename:
             return 's3'
-        elif 'gcs' in filename:
+        elif 'storage.googleapis.com' in filename:
             return 'gcs'
         else:
             return 'local_disk'
