@@ -6,7 +6,7 @@ classname_map = {
     's3': S3Filename, 
     'gcs': GCSFilename, 
     'local_disk': LocalFilename, 
-    'redis': RedisFilename
+    'redisv1': RedisFilename
     'redisv2': RedisFilenameV2
 }
 
