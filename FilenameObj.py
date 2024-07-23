@@ -3,6 +3,7 @@ from io import BytesIO, StringIO
 
 import boto3
 from google.cloud import storage
+import redis  # pip install redis & pip install python-redis
 
 from ImageDataLoaderFactory import ImageDataLoaderFactory
 from utils import filename2loc
