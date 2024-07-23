@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
-from EngineeringDataset import EngineeringDataset
+from DatasetFactory import DatasetFactory
 from utils import load_configs
 from set_global_vars import set_global_vars
 
@@ -28,6 +28,8 @@ def main()
     set_global_vars(**runtime_global_vars_map)
 
     ''' ________________________________________ load dataset ________________________________________ '''
+    # create a 'DatasetFactory' instance
+    dataset_factory = DatasetFactory()
     # load configuration
     input_size = (training_config['input_width'], training_config['input_height'])
     default_img_size = (training_config['default_img_width'], training_config['default_img_height'])
@@ -36,21 +38,21 @@ def main()
     valid_transform = get_custom_valid_transform(input_size, training_config['transform_version'])
     test_transform = get_custom_test_transform(input_size, training_config['transform_version'])
     custom_load_config.update({'random_aug_config': config['random_aug_config']})
-    trainset = EngineeringDataset.create_dataset(
+    trainset = dataset_factory.create(training_config['dataset_type']).create_dataset(
         dataset_config['train'], input_size, default_img_size, is_preshuffle, **custom_load_config
     )
     trainset_loader = DataLoader(
         trainset, args.global_batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=False, 
         drop_last=True, prefetch_factor=args.prefetch_factor
     )
-    validset = EngineeringDataset.create_dataset(
+    validset = dataset_factory.create(training_config['dataset_type']).create_dataset(
         dataset_config['valid'], input_size, default_img_size, False
     )
     validset_loader = DataLoader(
         validset, args.global_batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=False, 
         drop_last=True, prefetch_factor=args.prefetch_factor
     )
-    testset = EngineeringDataset.create_dataset(
+    testset = dataset_factory.create(training_config['dataset_type']).create_dataset(
         dataset_config['test'], input_size, default_img_size, False
     )
     testset_loader = DataLoader(
