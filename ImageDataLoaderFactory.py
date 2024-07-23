@@ -26,7 +26,7 @@ classname_map = {
         'jpg': NormalImageDataLoader, 
         'png': NormalImageDataLoader,
         'bmp': NormalImageDataLoader,
-        '': ArrayImageDataLoader
+        'redis': ArrayImageDataLoader
     }
 }
 
