@@ -76,6 +76,6 @@ class RedisFilename(Filename):
         )  # self.redis is a in-memory database
     
     def load(self):
-        self.img_data_loader.data = self.redis.get(self.filename)  # array
+        self.img_data_loader.data = self.redis.get(self.filename)  # bytes stream
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
