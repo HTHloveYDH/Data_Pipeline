@@ -4,29 +4,17 @@ from io import BytesIO, StringIO
 import boto3
 from google.cloud import storage
 
-from ImageFileLoader import NormalImageFileLoader, NpyImageFileLoader
+from ImageDataLoaderFactory import ImageDataLoaderFactory
 from utils import filename2loc
 import global_vars_manager
 
 
-def create_img_data_loader(filename:str):
-    path_delimiter = {'posix': '/', 'nt': '\\'}[os.name]
-    suffix = filename.split(path_delimiter)[-1].split('.')
-    if suffix in ['jpeg', 'jpg', 'png', 'bmp']:
-        return NormalImageFileLoader(filename)
-    elif suffix == 'npy':
-        loc = filename2loc(filename)
-        if loc in ['s3', 'gcs']:
-            return NpyImageFileLoaderV2(filename)
-        else:
-            return NpyImageFileLoader(filename)
-    else:
-        raise ValueError(f'.{suffix} is not supported')
+image_data_loader_factory = ImageDataLoaderFactory()  # singleton
 
 class Filename:
     def __init__(self, filename:str):
         self.filename = filename 
-        self.img_data_loader = create_img_data_loader(filename)
+        self.img_data_loader = image_data_loader_factory.create(filename)
 
     def load(self):
         raise NotImplementedError(" Can not call this member function via base class 'Filename'! ")
