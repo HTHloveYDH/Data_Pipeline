@@ -67,9 +67,13 @@ class GCSFilename:
 class RedisFilename(Filename):
     def __init__(self, filename):
         super(RedisFilename, self).__init__(filename)
-        self.redis = None
+        self.redis = redis.Redis(
+            host=global_vars_manager.get_global_var('REDIS_HOST'), 
+            port=global_vars_manager.get_global_var('REDIS_PORT'), 
+            db=0
+        )
     
     def load(self):
-        self.img_data_loader.data = None  # array
+        self.img_data_loader.data = self.redis.get(self.filename)  # array
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
