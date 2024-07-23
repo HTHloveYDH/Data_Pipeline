@@ -1,7 +1,8 @@
 import os
-from io import BytesIO
+from io import BytesIO, StringIO
 
 import boto3
+from google.cloud import storage
 
 from ImageFileLoader import NormalImageFileLoader, NpyImageFileLoader
 import global_vars_manager
@@ -50,14 +51,22 @@ class S3Filename:
         image_byte_string = self.s3.get_object(
             Bucket=self.s3_bucket_name, Key=self.filename
         )['Body'].read()
+        self.img_file_loader.filename = image_byte_string  # bytes stream
         image = self.img_file_loader.load_file()  # PIL Image, in 'RGB' order or npy file
         return image
 
 class GCSFilename:
     def __init__(self, filename:str):
         super(GCSFilename, self).__init__(filename)
+        gcs = storage.Client()
         self.gcs_bucket_name = global_vars_manager.get_global_var('GCS_BUCKET_NAME')
+        self.bucket = gcs.get_bucket(self.gcs_bucket_name)
     
     def load(self):
+        blob = self.bucket.blob(self.filename)
+        blob = blob.download_as_string()
+        # blob = blob.decode('utf-8')
+        blob = StringIO(blob)
+        self.img_file_loader.filename = blob  # string
         image = self.img_file_loader.load_file()  # PIL Image, in 'RGB' order or npy file
         return image
