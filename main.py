@@ -34,27 +34,29 @@ def main():
     # load configuration
     input_size = (training_config['input_width'], training_config['input_height'])
     default_img_size = (training_config['default_img_width'], training_config['default_img_height'])
+    img_mode = train_config['img_mode']  # 'RGB' or 'L'
     # get image transformation for data loading
     train_transform = get_custom_train_transform(input_size, training_config['transform_version'])
     valid_transform = get_custom_valid_transform(input_size, training_config['transform_version'])
     test_transform = get_custom_test_transform(input_size, training_config['transform_version'])
     custom_load_config.update({'random_aug_config': config['random_aug_config']})
     trainset = dataset_factory.create(training_config['dataset_type']).create_dataset(
-        dataset_config['train'], input_size, default_img_size, is_preshuffle, **custom_load_config
+        dataset_config['train'], input_size, default_img_size, img_mode, is_preshuffle, 
+        **custom_load_config
     )
     trainset_loader = DataLoader(
         trainset, args.global_batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=False, 
         drop_last=True, prefetch_factor=args.prefetch_factor
     )
     validset = dataset_factory.create(training_config['dataset_type']).create_dataset(
-        dataset_config['valid'], input_size, default_img_size, False
+        dataset_config['valid'], input_size, default_img_size, img_mode, False
     )
     validset_loader = DataLoader(
         validset, args.global_batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=False, 
         drop_last=True, prefetch_factor=args.prefetch_factor
     )
     testset = dataset_factory.create(training_config['dataset_type']).create_dataset(
-        dataset_config['test'], input_size, default_img_size, False
+        dataset_config['test'], input_size, default_img_size, img_mode, False
     )
     testset_loader = DataLoader(
         testset, args.global_batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=False, 
