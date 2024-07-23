@@ -13,8 +13,11 @@ classname_map = {
 class FilenameObjFactory:
     def __init__(self):
         self.valid_classname_list = [
-            'S3Filename', 'GCSFilename', 'LocalFilename', 
-            'RedisFilename', 'RedisFilenameV2'
+            'S3Filename', 
+            'GCSFilename', 
+            'LocalFilename', 
+            'RedisFilename', 
+            'RedisFilenameV2'
         ]
         print('FilenameObjFactory built successfully')
     
