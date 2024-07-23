@@ -71,7 +71,7 @@ class RedisFilename(Filename):
             host=global_vars_manager.get_global_var('REDIS_HOST'), 
             port=global_vars_manager.get_global_var('REDIS_PORT'), 
             db=0
-        )
+        )  # self.redis is a in-memory database
     
     def load(self):
         self.img_data_loader.data = self.redis.get(self.filename)  # array
