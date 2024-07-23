@@ -1,5 +1,6 @@
 import os
 from io import BytesIO, StringIO
+import pickle
 
 import boto3
 from google.cloud import storage
@@ -77,5 +78,21 @@ class RedisFilename(Filename):
     
     def load(self):
         self.img_data_loader.data = self.redis.get(self.filename)  # bytes stream
+        image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
+        return image
+
+class RedisFilenameV2(Filename):
+    def __init__(self, filename):
+        super(RedisFilename, self).__init__(filename)
+        self.redis = redis.Redis(
+            host=global_vars_manager.get_global_var('REDIS_HOST'), 
+            port=global_vars_manager.get_global_var('REDIS_PORT'), 
+            decode_responses=False,  # return bytes stream 
+            db=0
+        )  # self.redis is a in-memory database
+    
+    def load(self):
+        retrieved_data = self.redis.get(self.filename)  # bytes stream
+        self.img_data_loader.data = pickle.loads(retrieved_data)  # string
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
