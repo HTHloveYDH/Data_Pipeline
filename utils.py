@@ -1,5 +1,9 @@
 import os
 import json
+import pickle
+
+import redis
+import cv2
 
 
 def filename2loc(filename:str):
@@ -22,3 +26,18 @@ def load_configs():
     training_config = load_json(os.path.join('.', 'training_config.json'))
     dist_config = load_json(os.path.join('.', 'dist_config.json'))
     return dataset_config, training_config
+
+def create_redis_keys():
+    db = redis.Redis(host='localhost', port=6379, decode_responses=True)  
+    dataset_config_map = load_json(os.path.join('.', 'dataset_config.json'))
+    for key in dataset_config_map.keys():
+        index = 0
+        for dataset_config in dataset_config_map[key]:
+            with open(dataset_config['path'], 'r') as f:
+                json_content = json.load(f)
+            for img_info in json_content['annotations']:
+                img_data = cv2.imread(img_info['filename'])
+                img_data = cv2.cvtColor(img_data, cv2.COLOR_BGR2RGB)
+                serialized_img_data = pickle.dumps(img_data)
+                db.set(f'redis_image_{index}', serialized_img_data)  # set key - value pair
+                index += 1
