@@ -23,7 +23,7 @@ class ArrayImageDataLoader(ImageDataLoader):
         super(ArrayImageDataLoader, self).__init__(data)
     
     def load_data(self):
-        return Image.fromarray(img, mode='RGB')
+        return Image.fromarray(self.data, mode='RGB')
 
 class NpyImageDataLoader(ImageDataLoader):
     def __init__(self, data):
