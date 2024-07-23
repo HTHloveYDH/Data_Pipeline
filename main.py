@@ -5,6 +5,7 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 
 from DatasetFactory import DatasetFactory
+from get_transform import get_custom_test_transform, get_custom_valid_transform, get_custom_train_transform
 from utils import load_configs
 from set_global_vars import set_global_vars
 
