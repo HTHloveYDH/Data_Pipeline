@@ -28,7 +28,12 @@ def load_configs():
     return dataset_config, training_config
 
 def create_redis_keys():
-    db = redis.Redis(host='localhost', port=6379, decode_responses=True)  
+    redis_config_file_path = os.path.join('.', 'redis_config.json')
+    with open(redis_config_file_path, 'r') as f:
+        redis_config = json.load(f)
+    db = redis.Redis(
+        host=redis_config['redis_host'], port=redis_config['redis_port'], decode_responses=False
+    )  
     dataset_config_map = load_json(os.path.join('.', 'dataset_config.json'))
     for key in dataset_config_map.keys():
         index = 0
