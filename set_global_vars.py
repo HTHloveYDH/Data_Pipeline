@@ -19,6 +19,14 @@ def cloud_storage_init():
     global_vars_manager.set_global_var('S3_BUCKET_NAME', os.environ['S3_BUCKET_NAME'])
     global_vars_manager.set_global_var('GCS_BUCKET_NAME', '')
 
+def redis_init():
+    redis_config_file_path = os.path.join('.', 'redis_config.json')
+    with open(redis_config_file_path, 'r') as f:
+        redis_config = json.load(f)
+    global_vars_manager.set_global_var('REDIS_HOST', redis_config['redis_host'])
+    global_vars_manager.set_global_var('REDIS_PORT', redis_config['redis_port'])
+
 def set_global_vars(**kwargs):
     cloud_storage_init()
+    redis_init()
     global_vars_manager.set_global_var('IMG_MODE', kwargs['img_mode'])
