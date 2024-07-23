@@ -12,6 +12,7 @@ import global_vars_manager
 image_data_loader_factory = ImageDataLoaderFactory()  # singleton
 
 class Filename:
+    '''base class'''
     def __init__(self, filename:str):
         self.filename = filename 
         self.img_data_loader = image_data_loader_factory.create(filename)
