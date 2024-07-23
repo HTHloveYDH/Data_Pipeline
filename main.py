@@ -18,6 +18,10 @@ def main()
     args = parser.parse_args()
     # load config
     dataset_config, training_config = load_configs()
+    # initialize custom configs
+    custom_load_config = {}
+    custom_model_config = {}
+    custom_train_config = {}
     # set global variables
     runtime_global_vars_map = {}
     runtime_global_vars_map.update({'s3_bucket_name': , args.s3_bucket_name})
@@ -27,8 +31,13 @@ def main()
     # load configuration
     input_size = (training_config['input_width'], training_config['input_height'])
     default_img_size = (training_config['default_img_width'], training_config['default_img_height'])
+    # get image transformation for data loading
+    train_transform = get_custom_train_transform(input_size, training_config['transform_version'])
+    valid_transform = get_custom_valid_transform(input_size, training_config['transform_version'])
+    test_transform = get_custom_test_transform(input_size, training_config['transform_version'])
+    custom_load_config.update({'random_aug_config': config['random_aug_config']})
     trainset = EngineeringDataset.create_dataset(
-        dataset_config['train'], input_size, default_img_size, is_preshuffle
+        dataset_config['train'], input_size, default_img_size, is_preshuffle, **custom_load_config
     )
     trainset_loader = DataLoader(
         trainset, args.global_batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=False, 
@@ -50,8 +59,10 @@ def main()
     )
 
     ''' ____________________________________ build & compile model ___________________________________ '''
+    # custom_model_config.update()
     
     ''' ____________________________________________ train ___________________________________________ '''
+    # custom_train_config.update()
     # for epoch in range(1, training_config['epochs'] + 1):
     #     train_on_epoch()
     #     valid_on_epoch()
