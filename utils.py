@@ -11,8 +11,10 @@ def filename2loc(filename:str):
         return 's3'
     elif 'storage.googleapis.com' in filename:
         return 'gcs'
-    elif 'redis' in filename:
-        return 'redis'
+    elif 'redisv1' in filename:
+        return 'redisv1'
+    elif 'redisv2' in filename:
+        return 'redisv2'
     else:
         return 'local_disk'
 
