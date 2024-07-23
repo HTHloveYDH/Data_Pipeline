@@ -44,8 +44,8 @@ class S3Filename:
     def load(self):
         image_byte_string = self.s3.get_object(
             Bucket=self.s3_bucket_name, Key=self.filename
-        )['Body'].read()
-        self.img_data_loader.filename = BytesIO(image_byte_string)  # bytes stream
+        )['Body'].read()  # 
+        self.img_data_loader.data = BytesIO(image_byte_string)  # bytes stream
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
 
@@ -58,8 +58,8 @@ class GCSFilename:
     
     def load(self):
         blob = self.bucket.blob(self.filename)
-        blob = blob.download_as_string()
+        blob = blob.download_as_string()  # 
         # blob = blob.decode('utf-8')
-        self.img_data_loader.filename = BytesIO(blob)  # bytes stream
+        self.img_data_loader.data = BytesIO(blob)  # bytes stream
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
