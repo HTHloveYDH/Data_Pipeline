@@ -31,21 +31,22 @@ classname_map = {
 }
 
 class ImageDataLoaderFactory:
-    def __init__(self):
+    def __init__(self, img_mode:str):
         self.valid_classname_list = [
             'NormalImageDataLoader', 
             'NpyImageDataLoader', 
             'NpyImageDataLoaderV2',
             'ArrayImageDataLoader'
         ]
+        self.img_mode = img_mode
     
     def create(self, filename:str):
         loc = filename2loc(filename)
         path_delimiter = {'posix': '/', 'nt': '\\'}[os.name]
         suffix = filename.split(path_delimiter)[-1].split('.')
         classname = classname_map[loc][suffix]
-        return classname(filename)
+        return classname(filename, self.img_mode)
 
     def create_v2(self, filename:str, classname:str):
         assert classname in self.valid_classname_list
-        return eval(classname)(filename)
+        return eval(classname)(filename, self.img_mode)
