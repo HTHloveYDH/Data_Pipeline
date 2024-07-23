@@ -1,4 +1,4 @@
-from FilenameObjs import S3Filename, GCSFilename, LocalFilename
+from FilenameObj import S3Filename, GCSFilename, LocalFilename
 from utils import filename2loc
 
 
