@@ -23,3 +23,10 @@ class NpyImageDataLoader(ImageDataLoader):
     
     def load_data(self):
         return np.load(self.filename).astype(np.uint8)
+
+class NpyImageDataLoaderV2(ImageDataLoader):
+    def __init__(self, filename):
+        super(NpyImageDataLoaderV2, self).__init__(filename)
+    
+    def load_data(self):
+        return np.frombuffer(self.filename, dtype=np.uint8)
