@@ -63,3 +63,13 @@ class GCSFilename:
         self.img_data_loader.data = BytesIO(blob)  # bytes stream
         image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
         return image
+
+class RedisFilename(Filename):
+    def __init__(self, filename):
+        super(RedisFilename, self).__init__(filename)
+        self.redis = None
+    
+    def load(self):
+        self.img_data_loader.data = None  # array
+        image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
+        return image
