@@ -29,7 +29,7 @@ def load_configs():
     dist_config = load_json(os.path.join('.', 'dist_config.json'))
     return dataset_config, training_config
 
-def create_redis_keys(prefix:str):
+def create_redis_keys(prefix:str, suffix=''):
     assert prefix in ['redisv1', 'redisv2']
     redis_config_file_path = os.path.join('.', 'redis_config.json')
     with open(redis_config_file_path, 'r') as f:
@@ -47,5 +47,5 @@ def create_redis_keys(prefix:str):
                 img_data = cv2.imread(img_info['filename'])
                 img_data = cv2.cvtColor(img_data, cv2.COLOR_BGR2RGB)
                 serialized_img_data = pickle.dumps(img_data)
-                db.set(f'{prefix}_image_{index}', serialized_img_data)  # set key - value pair
+                db.set(f'{prefix}_image_{index}{suffix}', serialized_img_data)  # set key - value pair
                 index += 1
