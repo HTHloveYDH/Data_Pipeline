@@ -1,14 +1,20 @@
-from FilenameObj import S3Filename, GCSFilename, LocalFilename
+from FilenameObj import S3Filename, GCSFilename, LocalFilename, RedisFilename
 from utils import filename2loc
 
 
 classname_map = {
-    's3': S3Filename, 'gcs': GCSFilename, 'local_disk': LocalFilename
+    's3': S3Filename, 
+    'gcs': GCSFilename, 
+    'local_disk': LocalFilename, 
+    'redis': RedisFilename
+
 }
 
 class FilenameObjFactory:
     def __init__(self):
-        self.valid_classname_list = ['S3Filename', 'GCSFilename', 'LocalFilename']
+        self.valid_classname_list = [
+            'S3Filename', 'GCSFilename', 'LocalFilename', 'RedisFilename'
+        ]
         print('FilenameObjFactory built successfully')
     
     def create(self, filename:str):
