@@ -34,7 +34,7 @@ class EngineeringDataset(Dataset):
     def load_image(self, filename_obj):
         return filename_obj.load()
 
-        @staticmethod
+    @staticmethod
     def data_downsampling(filename_objs:list, downsampling_rate:float):
         filename_objs = filename_objs[::int(1 / downsampling_rate)]
         return filename_objs
