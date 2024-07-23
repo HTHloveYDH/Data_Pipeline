@@ -6,13 +6,18 @@ classname_map = {
 }
 
 class FilenameObjFactory:
-    def __init__(self, cloud_storage:str):
+    def __init__(self):
+        self.valid_cloud_storage_list = ['S3Filename', 'GCSFilename', 'LocalFilename']
         print('FilenameObjFactory built successfully')
     
     def create(self, filename:str):
         loc = self.filename2loc(filename)
         classname = classname_map[loc]
         return classname(filename)
+
+    def create_v2(self, filename:str, classname:str):
+        assert classname in self.valid_cloud_storage_list
+        return eval(classname)(filename)
 
     def filename2loc(self, filename:str):
         if 's3://' in filename:
