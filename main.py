@@ -10,7 +10,7 @@ from utils import load_configs
 from set_global_vars import set_global_vars
 
 
-def main()
+def main():
     ''' __________________________________________ setup _____________________________________________ '''
     parser = argparse.ArgumentParser('Pytorch training arguments')
     parser.add_argument('--global_batch_size', type=int, default=32)
