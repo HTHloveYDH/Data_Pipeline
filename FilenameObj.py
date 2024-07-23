@@ -9,7 +9,7 @@ from utils import filename2loc
 import global_vars_manager
 
 
-image_data_loader_factory = ImageDataLoaderFactory(global_vars_manager.get_global_var('img_mode'))  # singleton
+image_data_loader_factory = ImageDataLoaderFactory(global_vars_manager.get_global_var('IMG_MODE'))  # singleton
 
 class Filename:
     '''base class'''
