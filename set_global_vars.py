@@ -21,4 +21,4 @@ def cloud_storage_init():
 
 def set_global_vars(**kwargs):
     cloud_storage_init()
-    global_vars_manager.set_global_var('img_mode', kwargs['img_mode'])
+    global_vars_manager.set_global_var('IMG_MODE', kwargs['img_mode'])
