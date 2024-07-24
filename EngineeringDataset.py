@@ -35,6 +35,11 @@ class EngineeringDataset(Dataset):
         return filename_obj.load()
 
     @staticmethod
+    def init_lists():
+        filename_objs = []
+        return filename_objs
+
+    @staticmethod
     def data_downsampling(filename_objs:list, downsampling_rate:float):
         filename_objs = filename_objs[::int(1 / downsampling_rate)]
         return filename_objs
