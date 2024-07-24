@@ -4,7 +4,7 @@ import pickle
 
 import boto3
 from google.cloud import storage
-import redis  # pip install redis & pip install python-redis
+import redis  # pip install redis
 
 from ImageDataLoaderFactory import ImageDataLoaderFactory
 from utils import filename2loc
