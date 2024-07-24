@@ -78,7 +78,7 @@ class RedisFilename(Filename):
     
     def load(self):
         self.img_data_loader.data = self.redis.get(self.filename)  # bytes stream
-        image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
+        image = self.img_data_loader.load_data()
         return image
 
 class RedisFilenameV2(Filename):
@@ -94,5 +94,5 @@ class RedisFilenameV2(Filename):
     def load(self):
         retrieved_data = self.redis.get(self.filename)  # bytes stream
         self.img_data_loader.data = pickle.loads(retrieved_data)  # string
-        image = self.img_data_loader.load_data()  # PIL Image, in 'RGB' order or npy file
+        image = self.img_data_loader.load_data()
         return image
