@@ -71,7 +71,7 @@ class RedisFilename(Filename):
         super(RedisFilename, self).__init__(filename)
         self.redis = redis.Redis(
             host=global_vars_manager.get_global_var('REDIS_HOST'), 
-            port=global_vars_manager.get_global_var('REDIS_PORT'), 
+            port=global_vars_manager.get_global_var('REDIS_PORT'),  # 6379
             decode_responses=False,  # return bytes stream 
             db=0
         )  # self.redis is a in-memory database
@@ -86,7 +86,7 @@ class RedisFilenameV2(Filename):
         super(RedisFilename, self).__init__(filename)
         self.redis = redis.Redis(
             host=global_vars_manager.get_global_var('REDIS_HOST'), 
-            port=global_vars_manager.get_global_var('REDIS_PORT'), 
+            port=global_vars_manager.get_global_var('REDIS_PORT'),  # 6379
             decode_responses=False,  # return bytes stream 
             db=0
         )  # self.redis is a in-memory database
