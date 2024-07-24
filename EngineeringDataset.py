@@ -64,7 +64,7 @@ class EngineeringDataset(Dataset):
     def create_dataset(cls, dataset_configs:list, input_size:tuple, default_img_size:tuple, is_preshuffle:bool, \
                        transforms, **kwargs):
         filename_obj_factory = FilenameObjFactory()
-        filename_objs, labels, string_labels, class_weights, _ = EngineeringDataset.init_lists(True, output_class_map)
+        filename_objs = EngineeringDataset.init_lists()
         dataset_distribution = {}
         for dataset_config in dataset_configs:
             with open(dataset_config['data_dir'], 'r') as f:
