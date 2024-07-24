@@ -2,7 +2,7 @@ import os
 
 
 if __name__ == '__main__':
-    cmd = f"python ./eval/main.py"
+    cmd = f"python ./eval/eval.py"
     print('=================================================================')
     print('----------------- eval started -----------------')
     os.system(cmd)
