@@ -1,7 +1,7 @@
 import os
 
-from ImageDataLoader import NormalImageDataLoader, NpyImageDataLoader, NpyImageDataLoaderV2, \
-    ArrayImageDataLoader
+from data_pipeline.image_data_loader.ImageDataLoader import NormalImageDataLoader, NpyImageDataLoader, \
+    NpyImageDataLoaderV2, ArrayImageDataLoader
 from utils import filename2loc
 
 
@@ -26,11 +26,11 @@ classname_map = {
         'jpg': NormalImageDataLoader, 
         'png': NormalImageDataLoader,
         'bmp': NormalImageDataLoader,
-    }
-    'redisv1' {
+    },
+    'redisv1': {
         '': NormalImageDataLoader
     },
-    'redisv2' {
+    'redisv2': {
         '': ArrayImageDataLoader
     }
 }

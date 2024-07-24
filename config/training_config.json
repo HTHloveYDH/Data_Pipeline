@@ -1,0 +1,22 @@
+{
+    "global_batch_size": 16, 
+
+    "num_workers": 8,
+    "input_width": 224, 
+    "input_height": 224, 
+    "default_img_width": 224,
+    "default_img_height": 224,
+    "is_preshuffle": true,
+    "prefetch_factor": 2, 
+    "transform_version": "V2",
+    "dataset_type": "general",
+    "img_mode": "RGB",
+    "rescale_config": {
+        "scale": 255.0,
+        "offset": 0.0
+    },
+    "random_aug_config": {
+        "augment_probs": []
+    }
+
+}

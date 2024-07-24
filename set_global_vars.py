@@ -1,6 +1,7 @@
 import os
 import json
 
+from utils import load_json
 import global_vars_manager
 
 def cloud_storage_init():
@@ -16,11 +17,13 @@ def cloud_storage_init():
     global_vars_manager.set_global_var('REGION_NAME', config['region'])
     global_vars_manager.set_global_var('AWS_ACCESS_KEY_ID', credentials['aws_access_key_id'])
     global_vars_manager.set_global_var('AWS_SECRET_ACCESS_KEY', credentials['aws_secret_access_key'])
-    global_vars_manager.set_global_var('S3_BUCKET_NAME', os.environ['S3_BUCKET_NAME'])
-    global_vars_manager.set_global_var('GCS_BUCKET_NAME', '')
+
+    cloud_config = load_json(os.path.join('.', 'config', 'cloud_config.json'))
+    global_vars_manager.set_global_var('S3_BUCKET_NAME', cloud_config['s3_bucket_name'])
+    global_vars_manager.set_global_var('GCS_BUCKET_NAME', cloud_config['gcs_bucket_name'])
 
 def redis_init():
-    redis_config_file_path = os.path.join('.', 'redis_config.json')
+    redis_config_file_path = os.path.join('.', 'config', 'redis_config.json')
     with open(redis_config_file_path, 'r') as f:
         redis_config = json.load(f)
     global_vars_manager.set_global_var('REDIS_HOST', redis_config['redis_host'])

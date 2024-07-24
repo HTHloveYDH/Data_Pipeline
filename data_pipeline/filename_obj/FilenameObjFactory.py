@@ -1,12 +1,13 @@
-from FilenameObj import S3Filename, GCSFilename, LocalFilename, RedisFilename, RedisFilenameV2
+from data_pipeline.filename_obj.FilenameObj import S3Filename, GCSFilename, LocalFilename, \
+    RedisFilename, RedisFilenameV2
 from utils import filename2loc
 
 
 classname_map = {
     's3': S3Filename, 
     'gcs': GCSFilename, 
-    'local_disk': LocalFilename, 
-    'redisv1': RedisFilename
+    'local': LocalFilename, 
+    'redisv1': RedisFilename,
     'redisv2': RedisFilenameV2
 }
 

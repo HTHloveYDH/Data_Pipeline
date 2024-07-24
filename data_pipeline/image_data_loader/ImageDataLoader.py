@@ -17,25 +17,27 @@ class NormalImageDataLoader(ImageDataLoader):
         super(NormalImageDataLoader, self).__init__(data, img_mode)
     
     def load_data(self):
-        return Image.open(self.data, mode=self.img_mode)  # self.data can be either string or bytes stream
+        return Image.open(self.data, mode=self.img_mode)  # PIL image, self.data can be either string or bytes stream
 
 class ArrayImageDataLoader(ImageDataLoader):
     def __init__(self, data, img_mode:str):
         super(ArrayImageDataLoader, self).__init__(data, img_mode)
     
     def load_data(self):
-        return Image.fromarray(self.data, mode=self.img_mode)
+        return Image.fromarray(self.data, mode=self.img_mode)  # PIL image
 
 class NpyImageDataLoader(ImageDataLoader):
     def __init__(self, data, img_mode:str):
         super(NpyImageDataLoader, self).__init__(data, img_mode)
     
     def load_data(self):
-        return np.load(self.data).astype(np.uint8)
+        numpy_data = np.load(self.data).astype(np.uint8)
+        return Image.fromarray(numpy_data, mode=self.img_mode)  # PIL image
 
 class NpyImageDataLoaderV2(ImageDataLoader):
     def __init__(self, data, img_mode:str):
         super(NpyImageDataLoaderV2, self).__init__(data, img_mode)
     
     def load_data(self):
-        return np.frombuffer(self.data, dtype=np.uint8)
+        numpy_data = np.frombuffer(self.data, dtype=np.uint8)
+        return Image.fromarray(numpy_data, mode=self.img_mode)  # PIL image
