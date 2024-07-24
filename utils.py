@@ -25,10 +25,10 @@ def load_json(filename:str):
 
 def load_configs():
     dataset_config = load_json(os.path.join('.', 'config', 'dataset_config.json'))
-    training_config = load_json(os.path.join('.', 'config', 'training_config.json'))
+    train_config = load_json(os.path.join('.', 'config', 'train_config.json'))
     cloud_config = load_json(os.path.join('.', 'config', 'cloud_config.json'))
     dist_config = load_json(os.path.join('.', 'config', 'dist_config.json'))
-    return dataset_config, training_config, cloud_config, dist_config    
+    return dataset_config, train_config, cloud_config, dist_config    
 
 def create_redis_keys(prefix:str, suffix=''):
     assert prefix in ['redisv1', 'redisv2']
