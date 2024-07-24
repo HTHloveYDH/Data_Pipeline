@@ -2,7 +2,7 @@ import os
 
 
 if __name__ == '__main__':
-    cmd = f"python ./train/main.py"
+    cmd = f"python ./train/train.py"
     print('=================================================================')
     print('----------------- train started -----------------')
     os.system(cmd)
