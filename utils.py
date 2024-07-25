@@ -18,6 +18,9 @@ def filename2loc(filename:str):
     else:
         return 'local_disk'
 
+def check_config(train_config:dict):
+    pass
+
 def load_json(filename:str):
     with open(filename, 'r') as f:
         content = json.load(f)
@@ -28,9 +31,10 @@ def load_configs():
     train_config = load_json(os.path.join('.', 'config', 'train_config.json'))
     cloud_config = load_json(os.path.join('.', 'config', 'cloud_config.json'))
     dist_config = load_json(os.path.join('.', 'config', 'dist_config.json'))
+    check_config(train_config)
     return dataset_config, train_config, cloud_config, dist_config    
 
-def create_redis_keys(prefix:str, suffix=''):
+def create_redis_keys(prefix:str, suffix='.'):
     assert prefix in ['redisv1', 'redisv2']
     redis_config_file_path = os.path.join('.', 'config', 'redis_config.json')
     with open(redis_config_file_path, 'r') as f:
@@ -50,3 +54,4 @@ def create_redis_keys(prefix:str, suffix=''):
                 serialized_img_data = pickle.dumps(img_data)
                 db.set(f'{prefix}_image_{index}{suffix}', serialized_img_data)  # set key - value pair
                 index += 1
+    db.save(os.path.join('.', 'data', 'redis', f'{prefix}.db'))
