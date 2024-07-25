@@ -27,7 +27,7 @@ def main():
 
     ''' ________________________________________ load dataset ________________________________________ '''
     from data_pipeline.filename_obj.FilenameObjFactory import FilenameObjFactory
-    from data_pipeline.image_data_loader.ImageDataLoaderFactory import ImageDataLoaderFactory
+    from data_pipeline.image_data_loader.ImageDataLoaderFactory import ImageDataLoaderFactoryV2
     # create a 'DatasetFactory' instance
     dataset_factory = DatasetFactory()
     # load configuration
@@ -38,7 +38,7 @@ def main():
     test_transform = get_custom_test_transform(input_size, train_config['transform_version'])
     # set 'data object factory for creating dataset instance
     filename_obj_factory = FilenameObjFactory()
-    image_data_loader_factory = ImageDataLoaderFactory()
+    image_data_loader_factory = ImageDataLoaderFactoryV2()
     data_obj_factory = {'general': filename_obj_factory}.get(train_config['dataset_type'], image_data_loader_factory)
     custom_load_config.update({'random_aug_config': train_config['random_aug_config']})
     trainset = dataset_factory.create(train_config['dataset_type']).create_dataset(

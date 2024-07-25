@@ -20,17 +20,13 @@ class S3Dataset(BaseDataset):
         )
         self.s3_bucket_name = global_vars_manager.get_global_var('S3_BUCKET_NAME')
 
-    def __len__(self):
-        'Denotes the total number of samples'
-        return len(self.inputs)
-
     def __getitem__(self, index):
         'Generates one sample of data'
         # load image
         img_data_loader = self.data_objs[index]
-        image_byte_string = self.s3.get_object(Bucket=self.s3_bucket_name, Key=img_data_loader.data)['Body'].read()  # 
-        img_data_loader.data = BytesIO(image_byte_string)
-        image = img_data_loader.load_data()
+        image_byte_string = self.s3.get_object(Bucket=self.s3_bucket_name, Key=img_data_loader.key)['Body'].read()  # 
+        data = BytesIO(image_byte_string)
+        image = img_data_loader.load_data(data)
         # image augmentation and rescale
         image = self.transform(image, **{'random_aug_config': self.random_aug_config})
         return image

@@ -1,5 +1,5 @@
 from data_pipeline.dataset.Dataset import GeneralDataset
-from data_pipeline.dataset.RedisDataset import RedisDataset
+from data_pipeline.dataset.RedisDataset import RedisDataset, RedisDatasetV2
 from data_pipeline.dataset.S3Dataset import S3Dataset
 from data_pipeline.dataset.GCSDataset import GCSDataset
 from data_pipeline.dataset.LocalDataset import LocalDataset
@@ -7,7 +7,8 @@ from data_pipeline.dataset.LocalDataset import LocalDataset
 
 classname_map = {
     'general': GeneralDataset, 
-    'redis': RedisDataset,
+    'redisv1': RedisDataset,
+    'redisv2': RedisDatasetV2,
     's3': S3Dataset,
     'gcs': GCSDataset,
     'local': LocalDataset
@@ -17,7 +18,8 @@ class DatasetFactory:
     def __init__(self):
         self.valid_classname_list = [
             'GeneralDataset', 
-            'RedisDataset'
+            'RedisDataset',
+            'RedisDatasetV2',
             'S3Dataset',
             'GCSDataset',
             'LocalDataset'

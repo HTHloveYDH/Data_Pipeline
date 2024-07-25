@@ -54,3 +54,23 @@ class ImageDataLoaderFactory:
     def create_v2(self, classname:str):
         assert classname in self.valid_classname_list
         return eval(classname)()
+    
+class ImageDataLoaderFactoryV2:
+    def __init__(self):
+        self.valid_classname_list = [
+            'NormalImageDataLoader', 
+            'NpyImageDataLoader', 
+            'NpyImageDataLoaderV2',
+            'ArrayImageDataLoader'
+        ]
+    
+    def create(self, filename:str):
+        loc = filename2loc(filename)
+        path_delimiter = {'posix': '/', 'nt': '\\'}[os.name]
+        suffix = filename.split(path_delimiter)[-1].split('.')[-1]
+        classname = classname_map[loc][suffix]
+        return classname(filename)
+
+    def create_v2(self, filename:str, classname:str):
+        assert classname in self.valid_classname_list
+        return eval(classname)(filename)

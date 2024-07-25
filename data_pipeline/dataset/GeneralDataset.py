@@ -6,10 +6,6 @@ class GeneralDataset(BaseDataset):
     def __init__(self, data_objs:list, transform, **kwargs):
         super(GeneralDataset, self).__init__(data_objs, transform, **kwargs)
 
-    def __len__(self):
-        'Denotes the total number of samples'
-        return len(self.data_objs)
-
     def __getitem__(self, index):
         'Generates one sample of data'
         # load image

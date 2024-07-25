@@ -15,7 +15,8 @@ class BaseDataset(Dataset):
         self.transform = transform
 
     def __len__(self):
-        raise NotImplementedError(" Can not call '__len__' via base class 'BaseDataset'! ")
+        'Denotes the total number of samples'
+        return len(self.data_objs)
 
     def __getitem__(self, index):
         raise NotImplementedError(" Can not call '__getitem__' via base class 'BaseDataset'! ")
