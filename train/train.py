@@ -38,7 +38,7 @@ def main():
     test_transform = get_custom_test_transform(input_size, train_config['transform_version'])
     # set 'data object factory for creating dataset instance
     filename_obj_factory = FilenameObjFactory()
-    image_data_loader_factory = ImageDataLoaderFactory(global_vars_manager.get_global_var('IMG_MODE'))
+    image_data_loader_factory = ImageDataLoaderFactory()
     data_obj_factory = {'general': filename_obj_factory}.get(train_config['dataset_type'], image_data_loader_factory)
     custom_load_config.update({'random_aug_config': train_config['random_aug_config']})
     trainset = dataset_factory.create(train_config['dataset_type']).create_dataset(
@@ -70,8 +70,8 @@ def main():
     ''' ____________________________________________ train ___________________________________________ '''
     # custom_train_config.update()
     # for epoch in range(1, train_config['epochs'] + 1):
-    #     train_on_epoch()
-    #     valid_on_epoch()
+    #     train_on_epoch(trainset_loader)
+    #     valid_on_epoch(validset_loader)
         
     ''' __________________________________________ test ______________________________________________ '''
 

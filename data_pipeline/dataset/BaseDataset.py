@@ -1,4 +1,6 @@
 import random
+import json
+import copy
 
 from torch.utils.data import Dataset
 
@@ -38,7 +40,7 @@ class BaseDataset(Dataset):
     
     @staticmethod
     def data_upsampling(data_objs:list, upsampling_rate:int):
-        data_objs = EngineeringDataset.duplicate_list(data_objs, upsampling_rate)
+        data_objs = BaseDataset.duplicate_list(data_objs, upsampling_rate)
         return data_objs
     
     @staticmethod
