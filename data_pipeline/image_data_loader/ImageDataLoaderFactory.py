@@ -20,7 +20,7 @@ classname_map = {
         'png': NormalImageDataLoader,
         'bmp': NormalImageDataLoader,
     }, 
-    'local_disk': {
+    'local': {
         'npy': NpyImageDataLoader, 
         'jpeg': NormalImageDataLoader, 
         'jpg': NormalImageDataLoader, 

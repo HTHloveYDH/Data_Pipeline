@@ -19,7 +19,7 @@ class GCSDataset(BaseDataset):
         # load image
         img_data_loader = self.data_objs[index]
         blob = self.bucket.blob(img_data_loader.key)
-        blob = blob.download_as_string()  # 
+        blob = blob.download_as_string()  # string
         # blob = blob.decode('utf-8')
         data = BytesIO(blob)
         image = img_data_loader.load_data(data)

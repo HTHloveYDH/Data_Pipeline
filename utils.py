@@ -16,7 +16,7 @@ def filename2loc(filename:str):
     elif 'redisv2' in filename:
         return 'redisv2'
     else:
-        return 'local_disk'
+        return 'local'
 
 def check_config(train_config:dict):
     pass
