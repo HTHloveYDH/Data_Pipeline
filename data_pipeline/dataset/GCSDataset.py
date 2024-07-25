@@ -25,7 +25,7 @@ class GCSDataset(BaseDataset):
         data = BytesIO(image_bytes)  # type: BytesIO
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
-        image = self.transform(image, **{'random_aug_config': self.random_aug_config})
+        image = self.transform(image, **self.custom_load_config)
         return image
 
     def load_image(self, gcs_blob:str):

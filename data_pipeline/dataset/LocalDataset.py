@@ -14,5 +14,5 @@ class LocalDataset(BaseDataset):
         img_data_loader = self.data_objs[index]
         image = img_data_loader.load_data(img_data_loader.key)
         # image augmentation and rescale
-        image = self.transform(image, **{'random_aug_config': self.random_aug_config})
+        image = self.transform(image, **self.custom_load_config)
         return image

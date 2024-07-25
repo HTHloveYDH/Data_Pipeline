@@ -1,4 +1,4 @@
 {
-    "s3_bucket_name": "",
+    "s3_bucket_name": "harman-adasdc-dc-space2-incabin-sh-dms",
     "gcs_bucket_name": ""
 }

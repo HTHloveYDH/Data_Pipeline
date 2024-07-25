@@ -1,4 +1,4 @@
-from data_pipeline.dataset.Dataset import GeneralDataset
+from data_pipeline.dataset.GeneralDataset import GeneralDataset
 from data_pipeline.dataset.RedisDataset import RedisDataset, RedisDatasetV2
 from data_pipeline.dataset.S3Dataset import S3Dataset
 from data_pipeline.dataset.GCSDataset import GCSDataset
@@ -24,6 +24,7 @@ class DatasetFactory:
             'GCSDataset',
             'LocalDataset'
         ]
+        print('DatasetFactory built successfully')
     
     def create(self, dataset_type:str):
         classname = classname_map[dataset_type]

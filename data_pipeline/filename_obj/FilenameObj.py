@@ -23,14 +23,14 @@ class Filename:
         raise NotImplementedError(" Can not call this member function via base class 'Filename'! ")
 
 class LocalFilename(Filename):
-    def __init__(self, filename):
+    def __init__(self, filename:str):
         super(LocalFilename, self).__init__(filename)
     
     def load(self):
         image = self.img_data_loader.load_data(self.filename)
         return image
 
-class S3Filename:
+class S3Filename(Filename):
     s3 = boto3.client(
         's3', aws_access_key_id=global_vars_manager.get_global_var('AWS_ACCESS_KEY_ID'), 
         aws_secret_access_key=global_vars_manager.get_global_var('AWS_SECRET_ACCESS_KEY'), 
@@ -40,40 +40,44 @@ class S3Filename:
     def __init__(self, filename:str):
         super(S3Filename, self).__init__(filename)
         self.s3_bucket_name = global_vars_manager.get_global_var('S3_BUCKET_NAME')
+        self.start_idx = len(self.s3_bucket_name) + 6  # 6 = len('s3://') + len('/')
     
     def load(self):
         image_bytes = S3Filename.s3.get_object(
-            Bucket=self.s3_bucket_name, Key=self.filename
+            Bucket=self.s3_bucket_name, Key=self.filename[self.start_idx:]
         )['Body'].read()  # type: bytes
         assert isinstance(image_bytes, bytes)
         data = BytesIO(image_bytes)  # type: BytesIO
         image = self.img_data_loader.load_data(data)
         return image
 
-class GCSFilename:
-    bucket = storage.Client().get_bucket(global_vars_manager.get_global_var('GCS_BUCKET_NAME'))
+# class GCSFilename(Filename):
+#     bucket = storage.Client().get_bucket(global_vars_manager.get_global_var('GCS_BUCKET_NAME'))
 
-    def __init__(self, filename:str):
-        super(GCSFilename, self).__init__(filename)
+#     def __init__(self, filename:str):
+#         super(GCSFilename, self).__init__(filename)
     
-    def load(self):
-        blob = GCSFilename.bucket.blob(self.filename)
-        image_bytes = blob.download_as_string()  # type: bytes
-        assert isinstance(image_bytes, bytes)
-        # image_bytes = image_bytes.decode('utf-8')
-        data = BytesIO(image_bytes)  # type: BytesIO
-        image = self.img_data_loader.load_data(data)
-        return image
+#     def load(self):
+#         blob = GCSFilename.bucket.blob(self.filename)
+#         image_bytes = blob.download_as_string()  # type: bytes
+#         assert isinstance(image_bytes, bytes)
+#         # image_bytes = image_bytes.decode('utf-8')
+#         data = BytesIO(image_bytes)  # type: BytesIO
+#         image = self.img_data_loader.load_data(data)
+#         return image
 
 class RedisFilename(Filename):
     redis = redis.Redis(
         host=global_vars_manager.get_global_var('REDIS_HOST'), 
         port=global_vars_manager.get_global_var('REDIS_PORT'),  # 6379
+        db=global_vars_manager.get_global_var('REDIS_DB'),
+        password=global_vars_manager.get_global_var('REDIS_PASSWORD'),
         decode_responses=False,  # return bytes stream 
-        db=0
+        retry_on_timeout=global_vars_manager.get_global_var('REDIS_RETRY_ON_TIMEOUT'),
+        username=global_vars_manager.get_global_var('REDIS_USERNAME')
     )  # self.redis is a in-memory database
 
-    def __init__(self, filename):
+    def __init__(self, filename:str):
         super(RedisFilename, self).__init__(filename)
     
     def load(self):
@@ -86,12 +90,15 @@ class RedisFilenameV2(Filename):
     redis = redis.Redis(
         host=global_vars_manager.get_global_var('REDIS_HOST'), 
         port=global_vars_manager.get_global_var('REDIS_PORT'),  # 6379
+        db=global_vars_manager.get_global_var('REDIS_DB'),
+        password=global_vars_manager.get_global_var('REDIS_PASSWORD'),
         decode_responses=False,  # return bytes stream 
-        db=0
+        retry_on_timeout=global_vars_manager.get_global_var('REDIS_RETRY_ON_TIMEOUT'),
+        username=global_vars_manager.get_global_var('REDIS_USERNAME')
     )  # self.redis is a in-memory database
     
-    def __init__(self, filename):
-        super(RedisFilename, self).__init__(filename)
+    def __init__(self, filename:str):
+        super(RedisFilenameV2, self).__init__(filename)
     
     def load(self):
         image_bytes = RedisFilenameV2.redis.get(self.filename)  # type: bytes
@@ -99,3 +106,10 @@ class RedisFilenameV2(Filename):
         data = pickle.loads(image_bytes)  # numpy.ndarray
         image = self.img_data_loader.load_data(data)
         return image
+
+
+# ret = RedisFilename.redis.ping()
+# print('[DATASET] ', {True: 'redis client link established', False: 'redis client link failed'}[ret])
+
+# ret = RedisFilenameV2.redis.ping()
+# print('[DATASET] ', {True: 'redis client link established', False: 'redis client link failed'}[ret])

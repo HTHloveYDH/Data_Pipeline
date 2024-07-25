@@ -19,15 +19,18 @@ class S3Dataset(BaseDataset):
             region_name=self.region_name
         )
         self.s3_bucket_name = global_vars_manager.get_global_var('S3_BUCKET_NAME')
+        self.start_idx = len(self.s3_bucket_name) + 6  # 6 = len('s3://') + len('/')
 
     def __getitem__(self, index):
         'Generates one sample of data'
         # load image
         img_data_loader = self.data_objs[index]
-        image_bytes = self.s3.get_object(Bucket=self.s3_bucket_name, Key=img_data_loader.key)['Body'].read()  # type: bytes
+        image_bytes = self.s3.get_object(
+            Bucket=self.s3_bucket_name, Key=img_data_loader.key[self.start_idx:]
+        )['Body'].read()  # type: bytes
         assert isinstance(image_bytes, bytes)
         data = BytesIO(image_bytes)  # type: BytesIO
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
-        image = self.transform(image, **{'random_aug_config': self.random_aug_config})
+        image = self.transform(image, **self.custom_load_config)
         return image

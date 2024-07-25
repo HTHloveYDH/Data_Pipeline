@@ -1,6 +1,7 @@
 import random
 
 from PIL import Image
+import torch
 import numpy as np
 import torchvision.transforms as T
 # import torchvision.transforms.v2 as T
@@ -30,7 +31,7 @@ def get_custom_train_transform(input_size:tuple, version='V1'):
             image = image.resize(input_size, Image.BILINEAR)
             if 1.0 - random.uniform(0, 1) > 0.8:  # the probability of doing augmentation is 80%
                 image = augment_image(image, **{'random_aug_config': kwargs['random_aug_config']})
-            image = image.astype(np.float32) / kwargs['rescale_config']['scale'] + kwargs['rescale_config']['offset']
+            image = image / kwargs['rescale_config']['scale'] + kwargs['rescale_config']['offset']
             return image
     elif version == 'V3':
         def transform(image:Image, **kwargs):
@@ -54,10 +55,12 @@ def get_custom_valid_transform(input_size:tuple, version='V1'):
     elif version == 'V2':
         def transform(image:Image, **kwargs):
             image = image.resize(input_size, Image.BILINEAR)
-            image = image.astype(np.float32) / kwargs['rescale_config']['scale'] + kwargs['rescale_config']['offset']
+            image = T.functional.pil_to_tensor(image).to(dtype=torch.float32)
+            image = image / kwargs['rescale_config']['scale'] + kwargs['rescale_config']['offset']
             return image
     elif version == 'V3':
         def transform(image:Image, **kwargs):
+            image = T.functional.pil_to_tensor(image).to(dtype=torch.float32)
             return image
     else:
         raise ValueError(f" {version} is not supported")
@@ -76,10 +79,12 @@ def get_custom_test_transform(input_size:tuple, version='V1'):
     elif version == 'V2':
         def transform(image:Image, **kwargs):
             image = image.resize(input_size, Image.BILINEAR)
-            image = image.astype(np.float32) / kwargs['rescale_config']['scale'] + kwargs['rescale_config']['offset']
+            image = T.functional.pil_to_tensor(image).to(dtype=torch.float32)
+            image = image / kwargs['rescale_config']['scale'] + kwargs['rescale_config']['offset']
             return image
     elif version == 'V3':
         def transform(image:Image, **kwargs):
+            image = T.functional.pil_to_tensor(image).to(dtype=torch.float32)
             return image
     else:
         raise ValueError(f" {version} is not supported")

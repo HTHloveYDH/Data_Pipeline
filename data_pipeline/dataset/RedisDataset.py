@@ -14,9 +14,14 @@ class RedisDataset(BaseDataset):
         self.redis = redis.Redis(
             host=global_vars_manager.get_global_var('REDIS_HOST'), 
             port=global_vars_manager.get_global_var('REDIS_PORT'),  # 6379
+            db=global_vars_manager.get_global_var('REDIS_DB'),
+            password=global_vars_manager.get_global_var('REDIS_PASSWORD'),
             decode_responses=False,  # return bytes stream 
-            db=0
+            retry_on_timeout=global_vars_manager.get_global_var('REDIS_RETRY_ON_TIMEOUT'),
+            username=global_vars_manager.get_global_var('REDIS_USERNAME')
         )  # self.redis is a in-memory database
+        ret = self.redis.ping()
+        print('[DATASET] ', {True: 'redis client link established', False: 'redis client link failed'}[ret])
 
     def __getitem__(self, index):
         'Generates one sample of data'
@@ -26,7 +31,7 @@ class RedisDataset(BaseDataset):
         assert isinstance(data, bytes)
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
-        image = self.transform(image, **{'random_aug_config': self.random_aug_config})
+        image = self.transform(image, **self.custom_load_config)
         return image
     
 class RedisDatasetV2(BaseDataset):
@@ -36,9 +41,14 @@ class RedisDatasetV2(BaseDataset):
         self.redis = redis.Redis(
             host=global_vars_manager.get_global_var('REDIS_HOST'), 
             port=global_vars_manager.get_global_var('REDIS_PORT'),  # 6379
+            db=global_vars_manager.get_global_var('REDIS_DB'),
+            password=global_vars_manager.get_global_var('REDIS_PASSWORD'),
             decode_responses=False,  # return bytes stream 
-            db=0
+            retry_on_timeout=global_vars_manager.get_global_var('REDIS_RETRY_ON_TIMEOUT'),
+            username=global_vars_manager.get_global_var('REDIS_USERNAME')
         )  # self.redis is a in-memory database
+        ret = self.redis.ping()
+        print('[DATASET] ', {True: 'redis client link established', False: 'redis client link failed'}[ret])
 
     def __getitem__(self, index):
         'Generates one sample of data'
@@ -49,5 +59,5 @@ class RedisDatasetV2(BaseDataset):
         data = pickle.loads(image_bytes)  # numpy.ndarray
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
-        image = self.transform(image, **{'random_aug_config': self.random_aug_config})
+        image = self.transform(image, **self.custom_load_config)
         return image

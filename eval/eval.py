@@ -1,3 +1,9 @@
+import os
+import sys
+
+sys.path.append(os.getcwd())
+
+
 def main():
     pass
 

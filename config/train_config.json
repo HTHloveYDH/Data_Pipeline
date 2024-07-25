@@ -1,4 +1,6 @@
 {
+    "training_type": "check_dataset_output",
+    
     "global_batch_size": 16, 
 
     "num_workers": 8,

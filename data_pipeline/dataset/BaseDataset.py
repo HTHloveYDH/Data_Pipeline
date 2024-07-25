@@ -13,6 +13,7 @@ class BaseDataset(Dataset):
         super(BaseDataset, self).__init__()
         self.data_objs = data_objs  # list
         self.transform = transform
+        self.custom_load_config = kwargs
 
     def __len__(self):
         'Denotes the total number of samples'
@@ -58,14 +59,14 @@ class BaseDataset(Dataset):
         data_objs = cls.init_lists()
         dataset_distribution = {}
         for dataset_config in dataset_configs:
-            with open(dataset_config['data_dir'], 'r') as f:
+            with open(dataset_config['path'], 'r') as f:
                 annotation = json.load(f)
             for img_info_map in annotation['annotations']:
                 data_obj = data_obj_factory.create(img_info_map['filename'])
                 data_objs.append(data_obj)          
             # wether do downsampling or not
             if dataset_config['downsampling_rate'] > 0:
-                data_objs, = cls.data_downsampling(data_objs, dataset_config['downsampling_rate'])
+                data_objs = cls.data_downsampling(data_objs, dataset_config['downsampling_rate'])
             # wether do downsampling or not
             if dataset_config['upsampling_rate'] > 0:
                 data_objs = cls.data_upsampling(data_objs, dataset_config['upsampling_rate'])

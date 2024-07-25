@@ -43,6 +43,7 @@ class ImageDataLoaderFactory:
             'NpyImageDataLoaderV2',
             'ArrayImageDataLoader'
         ]
+        print('ImageDataLoaderFactory built successfully')
     
     def create(self, filename:str):
         loc = filename2loc(filename)
@@ -63,6 +64,7 @@ class ImageDataLoaderFactoryV2:
             'NpyImageDataLoaderV2',
             'ArrayImageDataLoader'
         ]
+        print('ImageDataLoaderFactoryV2 built successfully')
     
     def create(self, filename:str):
         loc = filename2loc(filename)

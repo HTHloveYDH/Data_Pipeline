@@ -1,10 +1,14 @@
+import os
+import sys
+
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
+sys.path.append(os.getcwd())
 from data_pipeline.dataset.DatasetFactory import DatasetFactory
 from data_pipeline.transform.get_transform import get_custom_test_transform, get_custom_valid_transform, get_custom_train_transform
-from utils import load_configs
+from utils import load_configs, check_dataset
 import global_vars_manager
 from set_global_vars import set_global_vars
 
@@ -40,29 +44,44 @@ def main():
     filename_obj_factory = FilenameObjFactory()
     image_data_loader_factory = ImageDataLoaderFactoryV2()
     data_obj_factory = {'general': filename_obj_factory}.get(train_config['dataset_type'], image_data_loader_factory)
-    custom_load_config.update({'random_aug_config': train_config['random_aug_config']})
+    custom_load_config.update(
+        {
+            'random_aug_config': train_config['random_aug_config'], 
+            'rescale_config': train_config['rescale_config']
+        }
+    )
     trainset = dataset_factory.create(train_config['dataset_type']).create_dataset(
         dataset_config['train'], train_config['is_preshuffle'], train_transform, data_obj_factory, 
         **custom_load_config
+    )
+    del custom_load_config['random_aug_config']
+    validset = dataset_factory.create(train_config['dataset_type']).create_dataset(
+        dataset_config['valid'], False, valid_transform, data_obj_factory, **custom_load_config
+    )
+    testset = dataset_factory.create(train_config['dataset_type']).create_dataset(
+        dataset_config['test'], False, test_transform, data_obj_factory, **custom_load_config
     )
     trainset_loader = DataLoader(
         trainset, train_config['global_batch_size'], shuffle=True, num_workers=train_config['num_workers'], 
         pin_memory=False, drop_last=True, prefetch_factor=train_config['prefetch_factor']
     )
-    validset = dataset_factory.create(train_config['dataset_type']).create_dataset(
-        dataset_config['valid'], False, valid_transform, data_obj_factory
-    )
     validset_loader = DataLoader(
         validset, train_config['global_batch_size'], shuffle=True, num_workers=train_config['num_workers'], 
         pin_memory=False, drop_last=True, prefetch_factor=train_config['prefetch_factor']
-    )
-    testset = dataset_factory.create(train_config['dataset_type']).create_dataset(
-        dataset_config['test'], False, test_transform, data_obj_factory
     )
     testset_loader = DataLoader(
         testset, train_config['global_batch_size'], shuffle=True, num_workers=train_config['num_workers'], 
         pin_memory=False, drop_last=True, prefetch_factor=train_config['prefetch_factor']
     )
+
+    ''' ______________________ check dataset output and generate annotation file _____________________ '''
+    if train_config['training_type'] == 'check_dataset_output':
+        check_dataset(testset, os.path.join('.', 'check_dataset_output'), 200, train_config['img_mode'])
+        print('------------------- check dataset output completed -------------------')
+        exit()
+    if train_config['training_type'] == 'generate_annotation_file_only':
+        print('----------------- generate annotation file completed -----------------')
+        exit()
 
     ''' ____________________________________ build & compile model ___________________________________ '''
     # custom_model_config.update()

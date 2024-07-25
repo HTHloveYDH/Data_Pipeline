@@ -1,5 +1,32 @@
 {
-    "train": [],
-    "valid": [],
-    "test": []
+    "train": [
+        {"path": "/data_ws/Data_1/tinghao/tensorflow_image_classification/data/annotations/trainset/OV2311/behind_only_sjt_train_annotations_v1.json",
+         "downsampling_rate": 0.1,
+         "upsampling_rate": -1
+        },
+        {"path": "/data_ws/Data_1/tinghao/tensorflow_image_classification/data/annotations/trainset/5MP/20230726GT09_img.json",
+         "downsampling_rate": 0.1,
+         "upsampling_rate": -1
+        }
+    ],
+    "valid": [
+        {"path": "/data_ws/Data_1/tinghao/tensorflow_image_classification/data/annotations/trainset/OV2311/behind_only_sjt_train_annotations_v1.json",
+         "downsampling_rate": 0.1,
+         "upsampling_rate": -1
+        },
+        {"path": "/data_ws/Data_1/tinghao/tensorflow_image_classification/data/annotations/trainset/5MP/20230726GT09_img.json",
+         "downsampling_rate": 0.1,
+         "upsampling_rate": -1
+        }
+    ],
+    "test": [
+        {"path": "/data_ws/Data_1/tinghao/tensorflow_image_classification/data/annotations/trainset/OV2311/behind_only_sjt_train_annotations_v1.json",
+         "downsampling_rate": 0.1,
+         "upsampling_rate": -1
+        },
+        {"path": "/data_ws/Data_1/tinghao/tensorflow_image_classification/data/annotations/trainset/5MP/20230726GT09_img.json",
+         "downsampling_rate": 0.1,
+         "upsampling_rate": -1
+        }
+    ]
 }
