@@ -3,7 +3,6 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 
 from data_pipeline.dataset.DatasetFactory import DatasetFactory
-from data_pipeline.image_data_loader.ImageDataLoaderFactory import ImageDataLoaderFactory
 from data_pipeline.transform.get_transform import get_custom_test_transform, get_custom_valid_transform, get_custom_train_transform
 from utils import load_configs
 import global_vars_manager
@@ -28,6 +27,7 @@ def main():
 
     ''' ________________________________________ load dataset ________________________________________ '''
     from data_pipeline.filename_obj.FilenameObjFactory import FilenameObjFactory
+    from data_pipeline.image_data_loader.ImageDataLoaderFactory import ImageDataLoaderFactory
     # create a 'DatasetFactory' instance
     dataset_factory = DatasetFactory()
     # load configuration

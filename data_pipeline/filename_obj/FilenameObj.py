@@ -14,7 +14,6 @@ image_data_loader_factory = ImageDataLoaderFactory()  # singleton
 
 class Filename:
     '''base class'''
-    img_mode = global_vars_manager.get_global_var('IMG_MODE')
 
     def __init__(self, filename:str):
         self.filename = filename 
@@ -28,7 +27,7 @@ class LocalFilename(Filename):
         super(LocalFilename, self).__init__(filename)
     
     def load(self):
-        image = self.img_data_loader.load_data(LocalFilename.img_mode)
+        image = self.img_data_loader.load_data(self.filename)
         return image
 
 class S3Filename:
@@ -46,8 +45,8 @@ class S3Filename:
         image_byte_string = S3Filename.s3.get_object(
             Bucket=self.s3_bucket_name, Key=self.filename
         )['Body'].read()  # 
-        self.img_data_loader.data = BytesIO(image_byte_string)  # bytes stream
-        image = self.img_data_loader.load_data(S3Filename.img_mode)
+        data = BytesIO(image_byte_string)  # bytes stream
+        image = self.img_data_loader.load_data(data)
         return image
 
 class GCSFilename:
@@ -60,8 +59,8 @@ class GCSFilename:
         blob = GCSFilename.bucket.blob(self.filename)
         blob = blob.download_as_string()  # 
         # blob = blob.decode('utf-8')
-        self.img_data_loader.data = BytesIO(blob)  # bytes stream
-        image = self.img_data_loader.load_data(GCSFilename.img_mode)
+        data = BytesIO(blob)  # bytes stream
+        image = self.img_data_loader.load_data(data)
         return image
 
 class RedisFilename(Filename):
@@ -76,8 +75,8 @@ class RedisFilename(Filename):
         super(RedisFilename, self).__init__(filename)
     
     def load(self):
-        self.img_data_loader.data = RedisFilename.redis.get(self.filename)  # bytes stream
-        image = self.img_data_loader.load_data(RedisFilename.img_mode)
+        data = RedisFilename.redis.get(self.filename)  # bytes stream
+        image = self.img_data_loader.load_data(data)
         return image
 
 class RedisFilenameV2(Filename):
@@ -93,6 +92,6 @@ class RedisFilenameV2(Filename):
     
     def load(self):
         retrieved_data = RedisFilenameV2.redis.get(self.filename)  # bytes stream
-        self.img_data_loader.data = pickle.loads(retrieved_data)  # string
-        image = self.img_data_loader.load_data(RedisFilenameV2.img_mode)
+        data = pickle.loads(retrieved_data)  # string
+        image = self.img_data_loader.load_data(data)
         return image
