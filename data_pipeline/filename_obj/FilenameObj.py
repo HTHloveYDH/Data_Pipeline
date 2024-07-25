@@ -44,8 +44,8 @@ class S3Filename:
     def load(self):
         image_byte_string = S3Filename.s3.get_object(
             Bucket=self.s3_bucket_name, Key=self.filename
-        )['Body'].read()  # string
-        data = BytesIO(image_byte_string)  # bytes stream
+        )['Body'].read()  # type: bytes
+        data = BytesIO(image_byte_string)  # type: BytesIO
         image = self.img_data_loader.load_data(data)
         return image
 
@@ -57,9 +57,9 @@ class GCSFilename:
     
     def load(self):
         blob = GCSFilename.bucket.blob(self.filename)
-        blob = blob.download_as_string()  # string
-        # blob = blob.decode('utf-8')
-        data = BytesIO(blob)  # bytes stream
+        image_byte_string = blob.download_as_string()  # type: bytes
+        # image_byte_string = image_byte_string.decode('utf-8')
+        data = BytesIO(image_byte_string)  # type: BytesIO
         image = self.img_data_loader.load_data(data)
         return image
 
@@ -75,7 +75,7 @@ class RedisFilename(Filename):
         super(RedisFilename, self).__init__(filename)
     
     def load(self):
-        data = RedisFilename.redis.get(self.filename)  # bytes stream
+        data = RedisFilename.redis.get(self.filename)  # type: bytes
         image = self.img_data_loader.load_data(data)
         return image
 
@@ -91,7 +91,7 @@ class RedisFilenameV2(Filename):
         super(RedisFilename, self).__init__(filename)
     
     def load(self):
-        retrieved_data = RedisFilenameV2.redis.get(self.filename)  # bytes stream
+        retrieved_data = RedisFilenameV2.redis.get(self.filename)  # type: bytes
         data = pickle.loads(retrieved_data)  # numpy.ndarray
         image = self.img_data_loader.load_data(data)
         return image
