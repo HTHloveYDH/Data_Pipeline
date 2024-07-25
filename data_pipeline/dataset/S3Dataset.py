@@ -24,8 +24,9 @@ class S3Dataset(BaseDataset):
         'Generates one sample of data'
         # load image
         img_data_loader = self.data_objs[index]
-        image_byte_string = self.s3.get_object(Bucket=self.s3_bucket_name, Key=img_data_loader.key)['Body'].read()  # type: bytes
-        data = BytesIO(image_byte_string)  # type: BytesIO
+        image_bytes = self.s3.get_object(Bucket=self.s3_bucket_name, Key=img_data_loader.key)['Body'].read()  # type: bytes
+        assert isinstance(image_bytes, bytes)
+        data = BytesIO(image_bytes)  # type: BytesIO
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
         image = self.transform(image, **{'random_aug_config': self.random_aug_config})

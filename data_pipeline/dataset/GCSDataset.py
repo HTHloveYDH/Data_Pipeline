@@ -19,9 +19,10 @@ class GCSDataset(BaseDataset):
         # load image
         img_data_loader = self.data_objs[index]
         blob = self.bucket.blob(img_data_loader.key)
-        image_byte_string = blob.download_as_string()  # type: bytes
-        # image_byte_string = image_byte_string.decode('utf-8')
-        data = BytesIO(image_byte_string)  # type: BytesIO
+        image_bytes = blob.download_as_string()  # type: bytes
+        assert isinstance(image_bytes, bytes)
+        # image_bytes = image_bytes.decode('utf-8')
+        data = BytesIO(image_bytes)  # type: BytesIO
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
         image = self.transform(image, **{'random_aug_config': self.random_aug_config})

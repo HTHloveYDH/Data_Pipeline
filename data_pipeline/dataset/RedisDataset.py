@@ -23,6 +23,7 @@ class RedisDataset(BaseDataset):
         # load image
         img_data_loader = self.data_objs[index]
         data = self.redis.get(img_data_loader.key)  # type: bytes
+        assert isinstance(data, bytes)
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
         image = self.transform(image, **{'random_aug_config': self.random_aug_config})
@@ -43,8 +44,9 @@ class RedisDatasetV2(BaseDataset):
         'Generates one sample of data'
         # load image
         img_data_loader = self.data_objs[index]
-        retrieved_data = self.redis.get(img_data_loader.key)  # type: bytes
-        data = pickle.loads(retrieved_data)  # numpy.ndarray
+        image_bytes = self.redis.get(img_data_loader.key)  # type: bytes
+        assert isinstance(image_bytes, bytes)
+        data = pickle.loads(image_bytes)  # numpy.ndarray
         image = img_data_loader.load_data(data)
         # image augmentation and rescale
         image = self.transform(image, **{'random_aug_config': self.random_aug_config})
