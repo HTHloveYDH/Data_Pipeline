@@ -19,6 +19,7 @@
     },
     "random_aug_config": {
         "augment_probs": []
-    }
+    },
+    "parallel_gather": "multi_process"
 
 }

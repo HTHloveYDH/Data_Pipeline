@@ -52,14 +52,16 @@ def main():
     )
     trainset = dataset_factory.create(train_config['dataset_type']).create_dataset(
         dataset_config['train'], train_config['is_preshuffle'], train_transform, data_obj_factory, 
-        **custom_load_config
+        train_config['parallel_gather'], **custom_load_config
     )
     del custom_load_config['random_aug_config']
     validset = dataset_factory.create(train_config['dataset_type']).create_dataset(
-        dataset_config['valid'], False, valid_transform, data_obj_factory, **custom_load_config
+        dataset_config['valid'], False, valid_transform, data_obj_factory, train_config['parallel_gather'], 
+        **custom_load_config
     )
     testset = dataset_factory.create(train_config['dataset_type']).create_dataset(
-        dataset_config['test'], False, test_transform, data_obj_factory, **custom_load_config
+        dataset_config['test'], False, test_transform, data_obj_factory, train_config['parallel_gather'], 
+        **custom_load_config
     )
     trainset_loader = DataLoader(
         trainset, train_config['global_batch_size'], shuffle=True, num_workers=train_config['num_workers'], 
