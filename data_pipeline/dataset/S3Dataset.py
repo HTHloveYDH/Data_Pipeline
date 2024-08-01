@@ -8,8 +8,8 @@ import global_vars_manager
 
 class S3Dataset(BaseDataset):
     'Characterizes a s3 dataset for PyTorch'
-    def __init__(self, data_objs:list, transform, **kwargs):
-        super(S3Dataset, self).__init__(data_objs, transform, **kwargs)
+    def __init__(self, data_objs_list:list, transform, **kwargs):
+        super(S3Dataset, self).__init__(data_objs_list, transform, **kwargs)
         self.aws_access_key_id = global_vars_manager.get_global_var('AWS_ACCESS_KEY_ID')
         self.aws_secret_access_key = global_vars_manager.get_global_var('AWS_SECRET_ACCESS_KEY')
         self.region_name = global_vars_manager.get_global_var('REGION_NAME')
@@ -24,7 +24,7 @@ class S3Dataset(BaseDataset):
     def __getitem__(self, index):
         'Generates one sample of data'
         # load image
-        img_data_loader = self.data_objs[index]
+        img_data_loader = self.data_objs_list[0][index]
         image_bytes = self.s3.get_object(
             Bucket=self.s3_bucket_name, Key=img_data_loader.key[self.start_idx:]
         )['Body'].read()  # type: bytes

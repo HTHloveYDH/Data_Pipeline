@@ -30,7 +30,7 @@ def main():
     set_global_vars(**runtime_global_vars_map)
 
     ''' ________________________________________ load dataset ________________________________________ '''
-    from data_pipeline.filename_obj.FilenameObjFactory import FilenameObjFactory
+    from data_pipeline.image_filename_obj.ImageFilenameObjFactory import ImageFilenameObjFactory
     from data_pipeline.image_data_loader.ImageDataLoaderFactory import ImageDataLoaderFactoryV2
     # create a 'DatasetFactory' instance
     dataset_factory = DatasetFactory()
@@ -41,9 +41,9 @@ def main():
     valid_transform = get_custom_valid_transform(input_size, train_config['transform_version'])
     test_transform = get_custom_test_transform(input_size, train_config['transform_version'])
     # set 'data object factory for creating dataset instance
-    filename_obj_factory = FilenameObjFactory()
+    image_filename_obj_factory = ImageFilenameObjFactory()
     image_data_loader_factory = ImageDataLoaderFactoryV2()
-    data_obj_factory = {'general': filename_obj_factory}.get(train_config['dataset_type'], image_data_loader_factory)
+    image_data_obj_factory = {'general': image_filename_obj_factory}.get(train_config['dataset_type'], image_data_loader_factory)
     custom_load_config.update(
         {
             'random_aug_config': train_config['random_aug_config'], 
@@ -51,16 +51,16 @@ def main():
         }
     )
     trainset = dataset_factory.create(train_config['dataset_type']).create_dataset(
-        dataset_config['train'], train_config['is_preshuffle'], train_transform, data_obj_factory, 
+        dataset_config['train'], train_config['is_preshuffle'], train_transform, image_data_obj_factory, 
         train_config['parallel_gather'], **custom_load_config
     )
     del custom_load_config['random_aug_config']
     validset = dataset_factory.create(train_config['dataset_type']).create_dataset(
-        dataset_config['valid'], False, valid_transform, data_obj_factory, train_config['parallel_gather'], 
+        dataset_config['valid'], False, valid_transform, image_data_obj_factory, train_config['parallel_gather'], 
         **custom_load_config
     )
     testset = dataset_factory.create(train_config['dataset_type']).create_dataset(
-        dataset_config['test'], False, test_transform, data_obj_factory, train_config['parallel_gather'], 
+        dataset_config['test'], False, test_transform, image_data_obj_factory, train_config['parallel_gather'], 
         **custom_load_config
     )
     trainset_loader = DataLoader(

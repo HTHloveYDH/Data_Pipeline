@@ -75,3 +75,7 @@ def check_dataset(dataset, save_dir:str, num:int, mode:str):
         index += 1
         if index >= num:
             break
+
+def init_mp(l):
+    global lock
+    lock = l

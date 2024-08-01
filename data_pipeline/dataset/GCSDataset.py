@@ -8,8 +8,8 @@ import global_vars_manager
 
 class GCSDataset(BaseDataset):
     'Characterizes a gcs dataset for PyTorch'
-    def __init__(self, data_objs:list, transform, **kwargs):
-        super(GCSDataset, self).__init__(data_objs, transform, **kwargs)
+    def __init__(self, data_objs_list:list, transform, **kwargs):
+        super(GCSDataset, self).__init__(data_objs_list, transform, **kwargs)
         gcs = storage.Client()
         self.gcs_bucket_name = global_vars_manager.get_global_var('GCS_BUCKET_NAME')
         self.bucket = gcs.get_bucket(self.gcs_bucket_name)
@@ -17,7 +17,7 @@ class GCSDataset(BaseDataset):
     def __getitem__(self, index):
         'Generates one sample of data'
         # load image
-        img_data_loader = self.data_objs[index]
+        img_data_loader = self.data_objs_list[0][index]
         blob = self.bucket.blob(img_data_loader.key)
         image_bytes = blob.download_as_string()  # type: bytes
         assert isinstance(image_bytes, bytes)
