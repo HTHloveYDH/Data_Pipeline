@@ -1,7 +1,18 @@
 {
-    "training_type": "check_dataset_output",
+    "training_type": "normal",
+
+    "model_type": "baseline",
+
+    "is_mix_precision": false,
     
-    "global_batch_size": 16, 
+    "batch_size": 16, 
+    "accum_steps": 4, 
+    "optimizer_type": "Adam", 
+    "learning_rate_scheduler_type": "exp_decay", 
+    "initial_learning_rates": [0.001], 
+
+    "visible_device_indices": [0],
+    "device_type": "GPU", 
 
     "num_workers": 8,
     "input_width": 224, 
@@ -18,8 +29,27 @@
         "offset": 0.0
     },
     "random_aug_config": {
-        "augment_probs": []
+        "aug_probs": [2.0, 1.0, 0.0, 1.0],
+        "affine_aug_probs": [1.0, 1.0, 0.0, 2.0, 3.0, 2.0, 1.0, 1.0, 1.0, 1.0],
+        "quality_aug_probs": [3.0, 1.0, 1.0, 1.0, 0.0, 1.0, 2.0, 1.0, 0.0],
+        "mix_aug_probs": [1.0, 1.0],
+        "zoom_aug_probs": {
+            "mode": [0.0, 1.0], 
+            "zoom_in": [1.0, 1.0, 1.0, 1.0], 
+            "zoom_out": [1.0, 1.0, 1.0, 1.0]
+        },
+        "hybrid_aug_probs": {
+            "mode": [1.0, 1.0],
+            "triple": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+            "dual": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+        }
     },
-    "parallel_gather": "multi_process"
+    "parallel_gather": "multi_process", 
+
+    "epochs": 100, 
+
+    "save_model_dir": "./ckpt/model", 
+    "load_optimizer_dir": null,
+    "log_interval": 50
 
 }

@@ -1,7 +1,7 @@
 import os
 import json
 
-from utils import load_json
+from utils.data_pipeline_utils import load_json
 import global_vars_manager
 
 def cloud_storage_init():

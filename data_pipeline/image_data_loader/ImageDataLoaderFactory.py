@@ -2,7 +2,7 @@ import os
 
 from data_pipeline.image_data_loader.ImageDataLoader import NormalImageDataLoader, NpyImageDataLoader, \
     NpyImageDataLoaderV2, ArrayImageDataLoader
-from utils import filename2loc
+from utils.data_pipeline_utils import filename2loc
 
 
 classname_map = {

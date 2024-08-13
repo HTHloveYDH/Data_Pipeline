@@ -1,18 +1,18 @@
 {
     "train": [
-        {"path": "path/to/train.json",
+        {"path": "/path/to/train.json",
          "downsampling_rate": 0.1,
          "upsampling_rate": -1
         }
     ],
     "valid": [
-        {"path": "path/to/valid.json",
+        {"path": "/path/to/valid.json",
          "downsampling_rate": 0.1,
          "upsampling_rate": -1
         }
     ],
     "test": [
-        {"path": "path/to/test.json",
+        {"path": "/path/to/test.json",
          "downsampling_rate": 0.1,
          "upsampling_rate": -1
         }

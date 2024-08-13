@@ -1,3 +1,5 @@
 {
-    
+    "dist_strategy": "default", 
+    "distribute_device_backbend": "nccl", 
+    "init_method": "env://"
 }

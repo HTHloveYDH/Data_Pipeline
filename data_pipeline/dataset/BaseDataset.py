@@ -27,17 +27,21 @@ class BaseDataset(Dataset):
         raise NotImplementedError(" Can not call '__getitem__' via base class 'BaseDataset'! ")
 
     @staticmethod
-    def init_lists():
+    def init_structs():
         img_data_objs = []
         return [img_data_objs]
 
     @staticmethod
-    def init_lists_mp(manager):
+    def init_structs_mp(manager):
         assert manager is not None
         img_data_objs = manager.list()
         data_objs_list = manager.list()
         data_objs_list.append(img_data_objs)
         return data_objs_list
+
+    @staticmethod
+    def copy_from_proxy_structs(main_process_vars:list, shared_vars:list):
+        main_process_vars[0] = list(shared_vars[0])
 
     @staticmethod
     def data_downsampling(data_objs_list:list, downsampling_rate:float):
@@ -71,7 +75,7 @@ class BaseDataset(Dataset):
 
     @staticmethod
     def get_annotations(dataset_config:dict, img_data_obj_factory):
-        new_data_objs_list = BaseDataset.init_lists()
+        new_data_objs_list = BaseDataset.init_structs()
         with open(dataset_config['path'], 'r') as f:
             annotation = json.load(f)
         for img_info_map in annotation['annotations']:
@@ -104,7 +108,7 @@ class BaseDataset(Dataset):
         # there is only one img_data_obj_factory instance in the runtime
         start_time = time.time()
         if parallel_gather == 'default':
-            data_objs_list = cls.init_lists()
+            data_objs_list = cls.init_structs()
             for dataset_config in dataset_configs:
                 BaseDataset.gather_annotations(dataset_config, img_data_obj_factory, data_objs_list)
         elif parallel_gather == 'multi_process':
@@ -114,7 +118,8 @@ class BaseDataset(Dataset):
             pool = multiprocessing.Pool(8)
             manager = multiprocessing.Manager()
             shared_lock = manager.Lock()
-            shared_vars = cls.init_lists_mp(manager)  # shared variables
+            data_objs_list = cls.init_structs()
+            shared_vars = cls.init_structs_mp(manager)  # shared variables
             for dataset_config in dataset_configs:
                 # pool.apply(
                 #     func=BaseDataset.gather_annotations_mp, 
@@ -125,9 +130,9 @@ class BaseDataset(Dataset):
                     args=(dataset_config, img_data_obj_factory, shared_vars, shared_lock)
                 )  # Here 'func' is the function called, args is the input, Bar is the callback function, the input of the callback function is the return value of func.
             pool.close()  # No new processes will be added to the pool after close, and the join function waits for all child processes to finish.
-            pool.join()  # Wait for the process to finish running, call the close function first or you will get an error!
+            pool.join()  # Wait for the sub-process to finish running, call the close function first or you will get an error!
             print('sub-processes ended')
-            data_objs_list = shared_vars
+            cls.copy_from_proxy_structs(data_objs_list, shared_vars)
         else:
             raise ValueError(f'parallel_gather type: {parallel_gather} is not supported')
         print('[Dataset] time for loading filenames:', time.time() - start_time)

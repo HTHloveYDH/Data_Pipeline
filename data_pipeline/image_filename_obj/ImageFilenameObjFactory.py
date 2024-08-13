@@ -1,6 +1,6 @@
 from data_pipeline.image_filename_obj.ImageFilenameObj import S3ImageFilename, LocalImageFilename, RedisImageFilename, \
     RedisImageFilenameV2#, GCSImageFilename
-from utils import filename2loc
+from utils.data_pipeline_utils import filename2loc
 
 
 classname_map = {

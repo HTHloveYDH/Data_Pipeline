@@ -1,0 +1,43 @@
+2 visible devices: 
+ 
+['NVIDIA GeForce GTX 1080 Ti', 'NVIDIA GeForce GTX 1080 Ti']
+ 
+ detected.
+using device: cuda
+ImageDataLoaderFactory built successfully
+DatasetFactory built successfully
+FilenameObjFactory built successfully
+ImageDataLoaderFactoryV2 built successfully
+sub-processes started
+sub-processes ended
+[Dataset] time for loading filenames:
+ 
+0.9250116348266602
+[Dataset] [train set initialized successfully]: 
+[Dataset] number of images: 
+ 
+4078
+sub-processes started
+sub-processes ended
+[Dataset] time for loading filenames:
+ 
+1.0166246891021729
+[Dataset] [valid set initialized successfully]: 
+[Dataset] number of images: 
+ 
+4078
+sub-processes started
+sub-processes ended
+[Dataset] time for loading filenames:
+ 
+0.9904167652130127
+[Dataset] [test set initialized successfully]: 
+[Dataset] number of images: 
+ 
+4078
+distribute strategy is set to default
+Epoch: 1: 
+val loss improved from inf to 3.5313735224917764e-07, saving model to ./ckpt/model
+Epoch: 2: 
+val loss improved from 3.5313735224917764e-07 to 3.240315038510744e-07, saving model to ./ckpt/model
+Epoch: 3: 
