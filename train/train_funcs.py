@@ -22,8 +22,8 @@ def train_on_epoch_hp(model, trainset_loader, optimizer, learning_rate_scheduler
     optimizer.zero_grad()
     for batch_idx, images in pbar:
         loss_accum = 0.0
-        output = model(images.to(device))
-        loss = output.mean()
+        output_tensor = model(images.to(device))
+        loss = output_tensor.mean()
         loss_accum = loss.detach()
         # loss.backward()
         if dp:
@@ -65,8 +65,8 @@ def train_on_epoch_amp(model, trainset_loader, optimizer, learning_rate_schedule
         # Runs the forward pass with autocasting.
         with torch.autocast(device_type=device.type, dtype=kwargs['amp_dtype']):
             loss_accum = 0.0
-            output = model(images.to(device))
-            loss = output.mean()
+            output_tensor = model(images.to(device))
+            loss = output_tensor.mean()
         loss_accum = loss.detach()
         # Scales loss.  Calls backward() on scaled loss to create scaled gradients.
         # Backward passes under autocast are not recommended.
@@ -107,8 +107,8 @@ def valid_on_epoch(model, validset_loader, valid_losses:list, valid_counter:list
         for images in validset_loader:
             # RuntimeError: Input type (torch.FloatTensor) and weight type (torch.cuda.FloatTensor) 
             # should be the same or input should be a MKLDNN tensor and weight is a dense tensor
-            output = model(images.to(device))
-            loss = output.mean()
+            output_tensor = model(images.to(device))
+            loss = output_tensor.mean()
             # loss_accum = loss.detach()
             loss_accum = loss
     if dp:
